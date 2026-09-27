@@ -150,6 +150,24 @@ export function MapTemplate<T extends MapTemplateId>({
                 "circle-stroke-color": "#ffffff",
               }}
             />
+            <Layer
+              id="capitals-label"
+              type="symbol"
+              // demotiles only serves the "Noto Sans Regular" glyph set
+              layout={{
+                visibility: political.showCapitals ? "visible" : "none",
+                "text-field": ["get", "name"],
+                "text-font": ["Noto Sans Regular"],
+                "text-size": 11,
+                "text-offset": [0, 0.8],
+                "text-anchor": "top",
+              }}
+              paint={{
+                "text-color": "#7f1d1d",
+                "text-halo-color": "#ffffff",
+                "text-halo-width": 1.2,
+              }}
+            />
           </Source>
         ) : null}
 
@@ -171,10 +189,11 @@ export function MapTemplate<T extends MapTemplateId>({
               <Layer
                 id="physical-labels"
                 type="symbol"
+                // demotiles only serves the "Noto Sans Regular" glyph set
                 layout={{
                   visibility: physical.showLabels ? "visible" : "none",
                   "text-field": ["get", "name"],
-                  "text-font": ["Open Sans Semibold"],
+                  "text-font": ["Noto Sans Regular"],
                   "text-size": 11,
                   "text-offset": [0, 0.6],
                   "text-anchor": "top",

@@ -70,6 +70,8 @@ const worldPolitical: MapTemplateDefinition<"world-political"> = {
   id: "world-political",
   name: "World Political (2D)",
   is3D: false,
+  // Temporary MVP-only style: demotiles is not production-grade and should be
+  // replaced with a proper world political style before general release.
   mapStyle: "https://demotiles.maplibre.org/style.json",
   defaultViewState: {
     longitude: 0,
