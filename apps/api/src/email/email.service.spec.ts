@@ -55,6 +55,20 @@ describe("EmailService", () => {
       await service.sendVerificationEmail("test1@example.dev", URLOrigin + "/verify");
       expect(logSpy).toHaveBeenCalled();
     });
+
+    it("logs the password reset email instead of sending it", async () => {
+      const logSpy = jest.spyOn((service as any).logger, "log").mockImplementation();
+      await expect(
+        service.sendPasswordResetEmail("test1@example.dev", URLOrigin + "/api/auth/reset-password/token")
+      ).resolves.toBeUndefined();
+      expect(logSpy).toHaveBeenCalledWith(expect.stringContaining("Reset your password"));
+    });
+
+    it("rejects a password reset URL with an unexpected origin", async () => {
+      await expect(
+        service.sendPasswordResetEmail("test1@example.dev", "https://evil.example/api/auth/reset-password/token")
+      ).rejects.toThrow("Password reset URL does not match expected origin");
+    });
   });
 
   describe("with EMAIL_PROVIDER=smtp", () => {
@@ -113,6 +127,22 @@ describe("EmailService", () => {
         port: 1025,
         secure: false,
       })
+    });
+
+    it("sends the password reset email via nodemailer", async () => {
+      const url = URLOrigin + "/api/auth/reset-password/test-token?callbackURL=";
+      await service.sendPasswordResetEmail("test1@example.dev", url);
+
+      expect(mockSendMail).toHaveBeenCalledTimes(1);
+      expect(mockSendMail).toHaveBeenCalledWith(
+        expect.objectContaining({
+          from: "noreply@localhost",
+          to: "test1@example.dev",
+          subject: "Reset your password",
+          text: expect.stringContaining(url),
+          html: expect.stringContaining(url),
+        })
+      );
     });
   });
 });
