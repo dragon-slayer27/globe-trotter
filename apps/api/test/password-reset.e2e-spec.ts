@@ -31,8 +31,8 @@ describe('Password reset flow (e2e)', () => {
     expect(sendResetSpy).toHaveBeenCalledTimes(1);
 
     const [, url] = sendResetSpy.mock.calls[0] as [string, string];
-    const token = new URL(url).pathname.split('/').pop();
-    expect(token).toBeTruthy();
+    const token = new URL(url).pathname.match(/^\/api\/auth\/reset-password\/([A-Za-z0-9_-]{16,})$/)?.[1];
+    expect(token).toBeDefined();
     return token as string;
   };
 
