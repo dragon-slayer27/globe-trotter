@@ -1,10 +1,13 @@
 //* Hardcoded style values are duplicated from @repo/config/tailwind for MVP
+import escapeHtml from "escape-html";
 
 export default function renderPasswordResetEmail(url: string): string {
-  //? Guard here too so the template stays safe even if called without the service's URL checks
+  //? Validate + escape here so the template stays safe even if called without the service's URL checks
   if (!/^https?:\/\//i.test(url)) {
     throw new Error("Password reset URL must use http or https.");
   }
+
+  const safeUrl = escapeHtml(url);
 
   return `
     <div style="font-family: system-ui, sans-serif; max-width: 480px; margin: 0 auto; padding: 24px;">
@@ -12,14 +15,14 @@ export default function renderPasswordResetEmail(url: string): string {
       <p>We received a request to reset the password for your Globe Trotter account. Click the button below to choose a new password.</p>
       <p style="margin: 24px 0;">
         <a
-          href="${url}"
+          href="${safeUrl}"
           style="background: #299764; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;"
         >
           Reset password
         </a>
       </p>
       <p>If the button doesn't work, copy and paste this link into your browser:</p>
-      <p style="word-break: break-all;">${url}</p>
+      <p style="word-break: break-all;">${safeUrl}</p>
       <p>This link expires in 1 hour and can only be used once.</p>
       <hr style="margin: 32px 0; border: none; border-top: 1px solid #e8e8ec;">
       <p style="font-size: 0.9rem; color: #60646c; margin: 0;">Globe Trotter</p>

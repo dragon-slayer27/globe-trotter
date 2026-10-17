@@ -160,4 +160,11 @@ describe("renderPasswordResetEmail", () => {
     const url = URLOrigin + "/api/auth/reset-password/token";
     expect(renderPasswordResetEmail(url)).toContain(`href="${url}"`);
   });
+
+  it("HTML-escapes the URL so it cannot break out of the href attribute", () => {
+    const html = renderPasswordResetEmail(URLOrigin + '/reset"><script>alert(1)</script>');
+
+    expect(html).not.toContain("<script>");
+    expect(html).toContain(`href="${URLOrigin}/reset&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;"`);
+  });
 });

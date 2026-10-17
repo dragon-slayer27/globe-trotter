@@ -111,7 +111,7 @@ export class EmailService {
     await this.send({
       to,
       subject: "Reset your password",
-      html: renderPasswordResetEmail(safeUrl),
+      html: renderPasswordResetEmail(url),
       text: `Click the link to reset your password (expires in 1 hour): ${safeUrl}`,
     });
   }
