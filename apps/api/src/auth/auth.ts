@@ -3,7 +3,7 @@ import { drizzleAdapter } from "@better-auth/drizzle-adapter";
 import { db } from "@repo/database";
 import { APIError, createAuthMiddleware } from "better-auth/api";
 import { passwordSchema } from "@repo/types";
-import { EmailService } from "src/email/email.service";
+import { EmailService } from "../email/email.service";
 import { Logger } from "@nestjs/common";
 
 export type Auth = ReturnType<typeof createAuth>;
