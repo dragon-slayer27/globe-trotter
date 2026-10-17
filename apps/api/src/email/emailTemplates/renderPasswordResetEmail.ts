@@ -1,6 +1,11 @@
 //* Hardcoded style values are duplicated from @repo/config/tailwind for MVP
 
 export default function renderPasswordResetEmail(url: string): string {
+  //? Guard here too so the template stays safe even if called without the service's URL checks
+  if (!/^https?:\/\//i.test(url)) {
+    throw new Error("Password reset URL must use http or https.");
+  }
+
   return `
     <div style="font-family: system-ui, sans-serif; max-width: 480px; margin: 0 auto; padding: 24px;">
       <h2 style="color: #18794e;">Reset your password</h2>

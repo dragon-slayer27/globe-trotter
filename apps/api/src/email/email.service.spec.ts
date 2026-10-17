@@ -4,6 +4,7 @@ import { ConfigService } from "@nestjs/config";
 import { EmailService } from "./email.service"
 import { Test, TestingModule } from "@nestjs/testing";
 import { createTransport } from "nodemailer";
+import renderPasswordResetEmail from "./emailTemplates/renderPasswordResetEmail";
 
 const URLOrigin = "http://localhost:4000";
 
@@ -144,5 +145,19 @@ describe("EmailService", () => {
         })
       );
     });
+  });
+});
+
+describe("renderPasswordResetEmail", () => {
+  it.each(["javascript:alert(1)", "data:text/html,x", "//evil.example/reset"])(
+    "rejects a non-http(s) URL: %s",
+    (url) => {
+      expect(() => renderPasswordResetEmail(url)).toThrow("Password reset URL must use http or https.");
+    },
+  );
+
+  it("renders an http(s) URL into the email", () => {
+    const url = URLOrigin + "/api/auth/reset-password/token";
+    expect(renderPasswordResetEmail(url)).toContain(`href="${url}"`);
   });
 });
